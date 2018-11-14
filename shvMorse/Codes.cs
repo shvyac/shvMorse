@@ -14,7 +14,10 @@
             }
         }
 
-       　　　　　　　　//public string GetSignalCode（SignalCodes co
+        public Dictionary<char, string> getchars()
+        {
+            return SymbolCodes;
+        }
 
         private static Dictionary<char, string> SymbolCodes = new Dictionary<char, string>
         {

@@ -15,24 +15,54 @@ namespace shvMorse
 {
     public partial class Form1 : Form
     {
+        Codes codeStore;
+
         public Form1()
         {
             InitializeComponent();
+
+            codeStore = new Codes();
+            Dictionary<char, string> cc = codeStore.getchars();
+            
+            DataSet ds = new DataSet();
+            DataTable dt = ds.Tables.Add("ResopnseTime");
+            DataRow dr;
+
+            dataGridViewResponseTime.DataSource = ds;
+            dataGridViewResponseTime.DataMember = "ResopnseTime";
+
+            dt.Columns.Add("Char");
+            dataGridViewResponseTime.Columns["Char"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dr = dt.NewRow();
+            dr["Char"] = "mSec/elem";
+            int[] speeddata = { 120, 100, 80, 67, 57, 44, 40, 36, 33 };
+            foreach (int speed in speeddata)
+            {
+                int wpm = (int)60 * 1000 / 50 / speed;
+                string txt = wpm.ToString() + "WPM"   ;
+                dt.Columns.Add(txt);
+                dr[txt] = speed.ToString() ;
+                dataGridViewResponseTime.Columns[txt].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+            dt.Rows.Add(dr);            
+            
+            char[] az = Enumerable.Range('a', 'z' - 'a' + 1).Select(i => (Char)i).ToArray();
+            char[] nm = Enumerable.Range('0', 10).Select(i => (Char)i).ToArray();
+            char[] all = az.Union(nm).ToArray();
+
+            foreach (var c in cc.Keys)
+            {
+                Console.WriteLine(c);
+                dr = dt.NewRow();
+                dr["Char"] = c;
+                dt.Rows.Add(dr);
+            }
+            dataGridViewResponseTime.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridViewResponseTime.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;        
         }
-
-
-
-        //[System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        //private static extern bool Beep(uint dwFreq, uint dwDuration);
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //Beep(700, 400);
-
-            //TestSine();
-
-
-
             int freq = 600;
             do
             {
@@ -227,9 +257,7 @@ namespace shvMorse
             PlayBeep((UInt16)freq, t);
             PlayBeep((UInt16)10, e);
 
-        }
-
-      
+        }      
 
         private void button4_Click_1(object sender, EventArgs e)
         {
@@ -261,6 +289,29 @@ namespace shvMorse
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var modem = new Modem();
+
+            int base_wpm = Convert.ToInt16(comboBoxWPM.Text);
+            int base_sound_freq = Convert.ToInt16(comboBoxFREQ.Text);
+            string base_char_set = comboBoxCharSet.Text;
+
+            Console.WriteLine(@"button5_Click");
+
+            textBox1.Text += comboBoxWPM.Text + " " + comboBoxFREQ.Text + "   ";
+
+            Console.WriteLine("Playing from Morse Code.");
+
+            string str_return = modem.PlayMorseToneWPM(base_wpm, base_sound_freq, base_char_set);
+
+            textBox1.Text += str_return + "\r\n";
+
+            textBox1.SelectionStart = textBox1.Text.Length;
+            textBox1.Focus();
+            textBox1.ScrollToCaret();
         }
     }
 }

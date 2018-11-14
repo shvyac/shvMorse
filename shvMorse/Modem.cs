@@ -11,15 +11,10 @@
     public class Modem
     {
         private int TimeUnitInMilliSeconds { get; set; } = 30;
-
         private int Frequency { get; set; } = 650;
-
         public char DotUnicode { get; set; } = '●'; // U+25CF
-
         public char DashUnicode { get; set; } = '▬'; // U+25AC
-
         public char Dot { get; set; } = '.';
-
         public char Dash { get; set; } = '-';
 
         Codes codeStore;
@@ -82,7 +77,7 @@
                     int wpm = (int) 60 * 1000 / 50 / speed;
                     Console.WriteLine(wpm.ToString()+ "WPM  " + speed.ToString()+ "mSec/elem");
 
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 2; i++)
                     {
                         PlayBeep(morseStringOrSentence, 600, speed);
                         PlayBeep("--.-", 600, speed);
@@ -118,6 +113,66 @@
             {
                 PlayMorseTone(ConvertToMorseCode(morseStringOrSentence));
             }
+        }
+
+        public string PlayMorseToneWPM(int base_wpm, int base_sound_freq, string base_char_set)
+        {
+            codeStore = new Codes();
+            Dictionary<char, string> cc = codeStore.getchars();
+            char[] char_keys = cc.Keys.ToArray();
+            int maxnum = cc.Keys.Count ;
+
+            switch (base_char_set)
+            {
+                case "Characters":
+                    maxnum = 26;
+                    break;
+                case "C+Numbers":
+                    maxnum = 36;
+                    break;
+                case "C+N+Special Characters":
+                    maxnum = 48;
+                    break;
+                case "C+N+S+Brackets":
+                    maxnum = 54;
+                    break;
+                default:
+                    maxnum = 26;
+                    break;
+            }
+            
+            Random cRandom = new System.Random();
+            int rnd = cRandom.Next(maxnum);
+            string string_char = char_keys[rnd].ToString();
+            string morse_code = ConvertToMorseCode(string_char);
+
+            if (IsValidMorse(morse_code))
+            {
+                //var pauseBetweenLetters = "_"; // One Time Unit
+                //var pauseBetweenWords = "___"; // Seven Time Unit
+
+                //morseStringOrSentence = morseStringOrSentence.Replace("  ", pauseBetweenWords);
+                //morseStringOrSentence = morseStringOrSentence.Replace(" ", pauseBetweenLetters);
+
+                int[] speeddata = { 120, 100, 80, 67, 57, 44, 40, 36, 33 };
+                //foreach (int speed in speeddata)
+                {
+                    int speed = (int)60 * 1000 / 50 / base_wpm;
+                    Console.WriteLine(base_wpm.ToString() + "WPM  " + speed.ToString() + "mSec/elem");
+
+                    for (int i = 0; i < 1; i++)
+                    {
+                        PlayBeep(morse_code, (ushort) base_sound_freq, speed);
+                        //PlayBeep("--.-", (ushort) base_sound_freq, speed);
+                    }
+                }
+            }
+            else
+            {
+                //PlayMorseToneWPM(ConvertToMorseCode(string_char));
+            }
+
+            return string_char;
         }
 
         private bool IsValidMorse(string sentence)
