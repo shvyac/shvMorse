@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Media;
 using MorseCode;
+using System.Windows.Input;
 
 namespace shvMorse
 {
@@ -20,7 +21,7 @@ namespace shvMorse
         public Form1()
         {
             InitializeComponent();
-
+            
             codeStore = new Codes();
             Dictionary<char, string> cc = codeStore.getchars();
             
@@ -58,7 +59,16 @@ namespace shvMorse
                 dt.Rows.Add(dr);
             }
             dataGridViewResponseTime.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridViewResponseTime.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;        
+            dataGridViewResponseTime.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            //Application.Idle += new EventHandler(Application_Idle);
+
+            //this.KeyDown += new KeyEventHandler(Application_Idle);
+
+            this.KeyPreview = true;
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(Form1_KeyUp);
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -291,6 +301,8 @@ namespace shvMorse
 
         }
 
+        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+
         private void button5_Click(object sender, EventArgs e)
         {
             var modem = new Modem();
@@ -299,19 +311,75 @@ namespace shvMorse
             int base_sound_freq = Convert.ToInt16(comboBoxFREQ.Text);
             string base_char_set = comboBoxCharSet.Text;
 
-            Console.WriteLine(@"button5_Click");
+            Console.WriteLine(@"\n button5_Click");
 
             textBox1.Text += comboBoxWPM.Text + " " + comboBoxFREQ.Text + "   ";
 
-            Console.WriteLine("Playing from Morse Code.");
+            Console.WriteLine("\t Playing from Morse Code.");
 
+            sw.Reset();
+            sw.Start();
             string str_return = modem.PlayMorseToneWPM(base_wpm, base_sound_freq, base_char_set);
+            //sw.Stop();
+            Console.WriteLine(sw.Elapsed.ToString(@"s\.fff"));
 
-            textBox1.Text += str_return + "\r\n";
+            textBox1.Text += str_return + " " + sw.Elapsed.ToString(@"s\.fff") + "\r\n";
 
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.Focus();
             textBox1.ScrollToCaret();
+        }
+
+        private void Application_Idle(object sender, EventArgs e)
+        {
+            //MessageBox.Show(Key.H.ToString());            
+       
+            if (Keyboard.IsKeyDown(Key.H) == true)
+            {
+                textBox1.Text += "H が押されています。" + "\r\n";
+            }
+            else
+            {
+                //textBox1.Text = "なし。";
+            }
+
+            if (Keyboard.IsKeyDown(Key.G) == true)
+            {
+                textBox1.Text += "G キーが押されています。" + "\r\n";
+            }
+            else
+            {
+                //textBox1.Text = "なし。";
+            }
+        }
+
+        int counter = 0;
+        private void Form1_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            //MessageBox.Show(e.KeyCode.ToString());
+            if (counter == 0)
+            {
+                Console.WriteLine(e.KeyCode.ToString() + "  Form1_KeyDown  " + counter.ToString());
+                counter++;
+                sw.Stop();
+                Console.WriteLine(sw.Elapsed.ToString(@"s\.fff"));
+            }
+        }
+
+        private void Form1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            //MessageBox.Show(e.KeyCode.ToString());
+            Console.WriteLine(e.KeyCode.ToString()+ "  Form1_PreviewKeyDown ");
+        }
+
+        private void Form1_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (counter > 0)
+            {
+                counter--;
+                //Console.WriteLine(e.KeyCode.ToString() + "  Form1_KeyUp  " + counter.ToString());
+                button5.PerformClick();
+            }
         }
     }
 }
