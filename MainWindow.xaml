@@ -1,0 +1,50 @@
+﻿<Window x:Class="shvMORSE.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:shvMORSE"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="467" Width="809">
+    <Grid Margin="0,0,2,-1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200*"/>
+            <RowDefinition Height="11*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="ButtonSpeedDown" Content="Start Speed Down" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Width="220" Click="ButtonSpeedDown_Click" Height="40" Background="{x:Null}"/>
+        <ListView x:Name="ListViewMorseDebug" HorizontalAlignment="Left" Height="160" Margin="20,240,0,0" VerticalAlignment="Top" Width="360">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView HorizontalAlignment="Left" Height="160" Margin="400,240,0,0" VerticalAlignment="Top" Width="380">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <TextBox x:Name="TextBoxSpeedStart" HorizontalAlignment="Left" Height="23" Margin="420,96,0,0" TextWrapping="Wrap" Text="40" VerticalAlignment="Top" Width="120" TextAlignment="Right"/>
+        <TextBox x:Name="TextBoxSpeedEnd" HorizontalAlignment="Left" Height="23" Margin="420,124,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="120" TextAlignment="Right"/>
+        <TextBox x:Name="TextBoxSpeedDecrement" HorizontalAlignment="Left" Height="23" Margin="420,157,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="120" TextAlignment="Right"/>
+        <TextBox x:Name="TextBoxRepeatCycles" HorizontalAlignment="Left" Height="22" Margin="420,198,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="120" TextAlignment="Right"/>
+        <TextBox x:Name="textBoxSystemAnswer" HorizontalAlignment="Left" Height="23" Margin="132,81,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="textBoxUserAnswer" HorizontalAlignment="Left" Height="23" Margin="132,116,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="ComboBoxCWPitch" HorizontalAlignment="Left" Margin="420,53,0,0" VerticalAlignment="Top" Width="120" Height="22" Text="700"/>
+        <RadioButton x:Name="radioButtonAnswerBefore" Content="Answer Before" HorizontalAlignment="Left" Margin="140,165,0,0" VerticalAlignment="Top" Height="15" Width="140"/>
+        <RadioButton x:Name="radioButtonAnswerAllAfter" Content="Answer All After" HorizontalAlignment="Left" Margin="140,193,0,0" VerticalAlignment="Top" Height="15" Width="140"/>
+        <Label x:Name="labelCurrentSpeed" Content="CurrentSpeed" HorizontalAlignment="Left" Margin="602,112,0,0" VerticalAlignment="Top" Height="26" Width="83"/>
+        <Label Content="SystemAnswer" HorizontalAlignment="Left" Margin="40,78,0,0" VerticalAlignment="Top" Height="26" Width="87"/>
+        <Label Content="CWPitch" HorizontalAlignment="Left" Margin="321,53,0,0" VerticalAlignment="Top" Height="26" Width="55"/>
+        <Label Content="UserAnswer" HorizontalAlignment="Left" Margin="45,112,0,0" VerticalAlignment="Top" Height="26" Width="73"/>
+        <Label Content="SpeedStart" HorizontalAlignment="Left" Margin="321,92,0,0" VerticalAlignment="Top" Height="26" Width="68"/>
+        <Label Content="SpeedEnd" HorizontalAlignment="Left" Margin="321,124,0,0" VerticalAlignment="Top" Height="26" Width="63"/>
+        <Label Content="SpeedDecrement" HorizontalAlignment="Left" Margin="321,154,0,0" VerticalAlignment="Top" Height="26" Width="101"/>
+        <Label Content="RepeatCycles" HorizontalAlignment="Left" Margin="321,198,0,0" VerticalAlignment="Top" Height="26" Width="80"/>
+        <Button x:Name="ButtonOpenFolder" Content="Open .wav Folder" HorizontalAlignment="Left" Margin="635,200,0,0" VerticalAlignment="Top" Width="125" Click="ButtonOpenFolder_Click"/>
+        <Button x:Name="ButtonStopCW" Content="Stop CW" HorizontalAlignment="Left" Margin="240,20,0,0" VerticalAlignment="Top" Width="60" Height="40" Click="ButtonStopCW_Click"/>
+
+    </Grid>
+</Window>
